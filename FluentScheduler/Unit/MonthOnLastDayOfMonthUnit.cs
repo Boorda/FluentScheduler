@@ -3,22 +3,25 @@
     /// <summary>
     /// Unit of time that represents last day of the month.
     /// </summary>
-    public sealed class MonthOnLastDayOfMonthUnit
+    public sealed class MonthOnLastDayOfMonthUnit : ITimeRestrictableUnit
     {
-        private readonly int _duration;
 
         internal MonthOnLastDayOfMonthUnit(Schedule schedule, int duration)
         {
-            _duration = duration;
+            Duration = duration;
             Schedule = schedule;
             Schedule.CalculateNextRun = x =>
             {
                 var nextRun = x.Date.Last();
-                return x > nextRun ? x.Date.First().AddMonths(_duration).Last() : x.Date.Last();
+                return x > nextRun ? x.Date.First().AddMonths(Duration).Last() : x.Date.Last();
             };
         }
 
+        internal int Duration { get; private set; }
+        int ITimeRestrictableUnit.Duration { get { return Duration; } }
+
         internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return Schedule; } }
 
         /// <summary>
         /// Runs the job at the given time of day.
@@ -30,7 +33,7 @@
             Schedule.CalculateNextRun = x =>
             {
                 var nextRun = x.Date.Last().AddHours(hours).AddMinutes(minutes);
-                return x > nextRun ? x.Date.First().AddMonths(_duration).Last().AddHours(hours).AddMinutes(minutes) : nextRun;
+                return x > nextRun ? x.Date.First().AddMonths(Duration).Last().AddHours(hours).AddMinutes(minutes) : nextRun;
             };
         }
     }

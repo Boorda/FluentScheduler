@@ -5,24 +5,23 @@
     /// <summary>
     /// Unit of time that represents day of the week.
     /// </summary>
-    public sealed class WeeklyDayOfWeekUnit
+    public sealed class WeeklyDayOfWeekUnit : ITimeRestrictableUnit
     {
-        private readonly int _duration;
 
         private readonly DayOfWeek _day;
 
         internal WeeklyDayOfWeekUnit(Schedule schedule, int duration, DayOfWeek day)
         {
-            _duration = duration;
+            Duration = duration;
             _day = day;
             Schedule = schedule;
 
-            if (_duration > 0)
+            if (Duration > 0)
             {
                 Schedule.CalculateNextRun = x =>
                 {
-                    var nextRun = x.Date.AddDays(_duration * 7).ThisOrNext(day);
-                    return x > nextRun ? nextRun.AddDays(_duration * 7) : nextRun;
+                    var nextRun = x.Date.AddDays(Duration * 7).ThisOrNext(day);
+                    return x > nextRun ? nextRun.AddDays(Duration * 7) : nextRun;
                 };
             }
             else
@@ -35,7 +34,11 @@
             }
         }
 
+        internal int Duration { get; private set; }
+        int ITimeRestrictableUnit.Duration { get { return Duration; } }
+
         internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return Schedule; } }
 
         /// <summary>
         /// Runs the job at the given time of day.
@@ -46,8 +49,8 @@
         {
             Schedule.CalculateNextRun = x =>
             {
-                var nextRun = x.Date.AddDays(_duration * 7).ThisOrNext(_day).AddHours(hours).AddMinutes(minutes);
-                return x > nextRun ? nextRun.AddDays(Math.Max(_duration, 1) * 7) : nextRun;
+                var nextRun = x.Date.AddDays(Duration * 7).ThisOrNext(_day).AddHours(hours).AddMinutes(minutes);
+                return x > nextRun ? nextRun.AddDays(Math.Max(Duration, 1) * 7) : nextRun;
             };
         }
     }

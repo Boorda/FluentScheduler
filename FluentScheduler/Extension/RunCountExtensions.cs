@@ -1,15 +1,17 @@
 ﻿namespace FluentScheduler
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
-    /// DelayFor extension methods.
+    /// RunCount Extension Methods
     /// </summary>
-    public static class DelayForExtensions
+    public static class RunCountExtensions
     {
-        private static DelayTimeUnit DelayFor(Schedule schedule, int interval)
+
+        private static RunCountRestrictableUnit NumberOfTimes(Schedule schedule, int interval)
         {
-            return new DelayTimeUnit(schedule, interval);
+            return new RunCountRestrictableUnit(schedule, interval);
         }
 
         /// <summary>
@@ -17,12 +19,12 @@
         /// </summary>
         /// <param name="unit">The schedule being affected.</param>
         /// <param name="interval">Interval to wait.</param>
-        public static DelayTimeUnit DelayFor(this SpecificTimeUnit unit, int interval)
+        public static RunCountRestrictableUnit NumberOfTimes(this IUnit unit, int interval)
         {
             if (unit == null)
                 throw new ArgumentNullException("unit");
 
-            return DelayFor(unit.Schedule, interval);
+            return NumberOfTimes(unit.Schedule , interval);
         }
 
     }

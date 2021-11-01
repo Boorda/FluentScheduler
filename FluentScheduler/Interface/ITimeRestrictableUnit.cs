@@ -3,11 +3,11 @@ namespace FluentScheduler
     /// <summary>
     /// Common interface of units that can be restricted by time.
     /// </summary>
-    public interface ITimeRestrictableUnit
+    public interface ITimeRestrictableUnit : IUnit
     {
         /// <summary>
-        /// The schedule being affected.
+        /// Specified unit duration.
         /// </summary>
-        Schedule Schedule { get; }
+        int Duration { get; }
     }
 }

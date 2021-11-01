@@ -5,7 +5,7 @@ namespace FluentScheduler
     /// <summary>
     /// Unit of specific time of the day.
     /// </summary>
-    public sealed class SpecificTimeUnit
+    public sealed class SpecificTimeUnit: IUnit
     {
         internal SpecificTimeUnit(Schedule schedule)
         {
@@ -13,6 +13,7 @@ namespace FluentScheduler
         }
 
         internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return Schedule; } }
 
         /// <summary>
         /// Also runs the job according to the given interval.

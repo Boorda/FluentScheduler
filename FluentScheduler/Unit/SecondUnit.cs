@@ -5,17 +5,18 @@
     /// </summary>
     public sealed class SecondUnit : ITimeRestrictableUnit
     {
-        private readonly int _duration;
 
         internal SecondUnit(Schedule schedule, int duration)
         {
-            _duration = duration;
+            Duration = duration;
             Schedule = schedule;
-            Schedule.CalculateNextRun = x => x.AddSeconds(_duration);
+            Schedule.CalculateNextRun = x => x.AddSeconds(Duration);
         }
 
-        internal Schedule Schedule { get; private set; }
+        internal int Duration { get; private set; }
+        int ITimeRestrictableUnit.Duration { get { return Duration; } }
 
-        Schedule ITimeRestrictableUnit.Schedule { get { return this.Schedule; } }
+        internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return Schedule; } }
     }
 }

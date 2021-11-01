@@ -5,17 +5,18 @@
     /// </summary>
     public sealed class MillisecondUnit : ITimeRestrictableUnit
     {
-        private readonly int _duration;
 
         internal MillisecondUnit(Schedule schedule, int duration)
         {
-            _duration = duration;
+            Duration = duration;
             Schedule = schedule;
-            Schedule.CalculateNextRun = x => x.AddMilliseconds(_duration);
+            Schedule.CalculateNextRun = x => x.AddMilliseconds(Duration);
         }
 
-        internal Schedule Schedule { get; private set; }
+        internal int Duration { get; private set; }
+        int ITimeRestrictableUnit.Duration { get { return Duration; } }
 
-        Schedule ITimeRestrictableUnit.Schedule { get { return this.Schedule; } }
+        internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return Schedule; } }
     }
 }

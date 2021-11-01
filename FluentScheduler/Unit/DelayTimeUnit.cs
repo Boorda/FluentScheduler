@@ -5,25 +5,28 @@
     /// <summary>
     /// Unit used to represent delay.
     /// </summary>
-    public sealed class DelayTimeUnit
+    public sealed class DelayTimeUnit: ITimeRestrictableUnit
     {
-        private readonly int _interval;
 
-        internal DelayTimeUnit(Schedule schedule, int interval)
+        internal DelayTimeUnit(Schedule schedule, int duration)
         {
-            _interval = interval;
+            Duration = duration;
             Schedule = schedule;
         }
 
+        internal int Duration { get; private set; }
+        int ITimeRestrictableUnit.Duration { get { return Duration; } }
+
         internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return Schedule; } }
 
         /// <summary>
         /// Sets the interval to milliseconds.
-        /// The timing may not be accurated when used with very low intervals.
+        /// The timing may not be accurate when used with very low intervals.
         /// </summary>
         public void Milliseconds()
         {
-            Schedule.DelayRunFor = TimeSpan.FromMilliseconds(_interval);
+            Schedule.DelayRunFor = TimeSpan.FromMilliseconds(Duration);
         }
 
         /// <summary>
@@ -31,7 +34,7 @@
         /// </summary>
         public void Seconds()
         {
-            Schedule.DelayRunFor = TimeSpan.FromSeconds(_interval);
+            Schedule.DelayRunFor = TimeSpan.FromSeconds(Duration);
         }
 
         /// <summary>
@@ -39,7 +42,7 @@
         /// </summary>
         public void Minutes()
         {
-            Schedule.DelayRunFor = TimeSpan.FromMinutes(_interval);
+            Schedule.DelayRunFor = TimeSpan.FromMinutes(Duration);
         }
 
         /// <summary>
@@ -47,7 +50,7 @@
         /// </summary>
         public void Hours()
         {
-            Schedule.DelayRunFor = TimeSpan.FromHours(_interval);
+            Schedule.DelayRunFor = TimeSpan.FromHours(Duration);
         }
 
         /// <summary>
@@ -55,7 +58,7 @@
         /// </summary>
         public void Days()
         {
-            Schedule.DelayRunFor = TimeSpan.FromDays(_interval);
+            Schedule.DelayRunFor = TimeSpan.FromDays(Duration);
         }
 
         /// <summary>
@@ -63,7 +66,7 @@
         /// </summary>
         public void Weeks()
         {
-            Schedule.DelayRunFor = TimeSpan.FromDays(_interval * 7);
+            Schedule.DelayRunFor = TimeSpan.FromDays(Duration * 7);
         }
 
         /// <summary>
@@ -72,7 +75,7 @@
         public void Months()
         {
             var today = DateTime.Today;
-            Schedule.DelayRunFor = today.AddMonths(_interval).Subtract(today);
+            Schedule.DelayRunFor = today.AddMonths(Duration).Subtract(today);
         }
 
         /// <summary>
@@ -81,7 +84,7 @@
         public void Years()
         {
             var today = DateTime.Today;
-            Schedule.DelayRunFor = today.AddYears(_interval).Subtract(today);
+            Schedule.DelayRunFor = today.AddYears(Duration).Subtract(today);
         }
     }
 }

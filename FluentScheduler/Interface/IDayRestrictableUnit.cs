@@ -5,13 +5,8 @@ namespace FluentScheduler
     /// <summary>
     /// Common interface of units that can be restricted by day.
     /// </summary>
-    public interface IDayRestrictableUnit
+    public interface IDayRestrictableUnit : ITimeRestrictableUnit
     {
-        /// <summary>
-        /// The schedule being affected.
-        /// </summary>
-        Schedule Schedule { get; }
-
         /// <summary>
         /// Increment the given days.
         /// </summary>

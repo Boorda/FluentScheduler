@@ -3,25 +3,28 @@
     /// <summary>
     /// Unit of time.
     /// </summary>
-    public sealed class TimeUnit
+    public sealed class TimeUnit : ITimeRestrictableUnit
     {
-        private readonly Schedule _schedule;
-
-        private readonly int _duration;
 
         internal TimeUnit(Schedule schedule, int duration)
         {
-            _schedule = schedule;
-            _duration = duration;
+            Schedule = schedule;
+            Duration = duration;
         }
+
+        internal int Duration { get; private set; }
+        int ITimeRestrictableUnit.Duration { get { return Duration; } }
+
+        internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return Schedule; } }
 
         /// <summary>
         /// Sets the interval to milliseconds.
-        /// The timing may not be accurated when used with very low intervals.
+        /// The timing may not be accurate when used with very low intervals.
         /// </summary>
         public MillisecondUnit Milliseconds()
         {
-            return new MillisecondUnit(_schedule, _duration);
+            return new MillisecondUnit(Schedule, Duration);
         }
 
         /// <summary>
@@ -29,7 +32,7 @@
         /// </summary>
         public SecondUnit Seconds()
         {
-            return new SecondUnit(_schedule, _duration);
+            return new SecondUnit(Schedule, Duration);
         }
 
         /// <summary>
@@ -37,7 +40,7 @@
         /// </summary>
         public MinuteUnit Minutes()
         {
-            return new MinuteUnit(_schedule, _duration);
+            return new MinuteUnit(Schedule, Duration);
         }
 
         /// <summary>
@@ -45,7 +48,7 @@
         /// </summary>
         public HourUnit Hours()
         {
-            return new HourUnit(_schedule, _duration);
+            return new HourUnit(Schedule, Duration);
         }
 
         /// <summary>
@@ -53,7 +56,7 @@
         /// </summary>
         public DayUnit Days()
         {
-            return new DayUnit(_schedule, _duration);
+            return new DayUnit(Schedule, Duration);
         }
 
         /// <summary>
@@ -61,7 +64,7 @@
         /// </summary>
         public WeekdayUnit Weekdays()
         {
-            return new WeekdayUnit(_schedule, _duration);
+            return new WeekdayUnit(Schedule, Duration);
         }
 
         /// <summary>
@@ -69,7 +72,7 @@
         /// </summary>
         public WeekUnit Weeks()
         {
-            return new WeekUnit(_schedule, _duration);
+            return new WeekUnit(Schedule, Duration);
         }
 
         /// <summary>
@@ -77,7 +80,7 @@
         /// </summary>
         public MonthUnit Months()
         {
-            return new MonthUnit(_schedule, _duration);
+            return new MonthUnit(Schedule, Duration);
         }
     }
 }

@@ -5,18 +5,21 @@
     /// <summary>
     /// Unit of time in months.
     /// </summary>
-    public sealed class MonthUnit
+    public sealed class MonthUnit : ITimeRestrictableUnit
     {
-        private readonly int _duration;
 
         internal MonthUnit(Schedule schedule, int duration)
         {
-            _duration = duration;
+            Duration = duration;
             Schedule = schedule;
-            Schedule.CalculateNextRun = x => x.Date.AddMonths(_duration);
+            Schedule.CalculateNextRun = x => x.Date.AddMonths(Duration);
         }
 
+        internal int Duration { get; private set; }
+        int ITimeRestrictableUnit.Duration { get { return Duration; } }
+
         internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return Schedule; } }
 
         /// <summary>
         /// Runs the job on the given day of the month.
@@ -24,7 +27,7 @@
         /// <param name="day">The day (1 through the number of days in month).</param>
         public MonthOnDayOfMonthUnit On(int day)
         {
-            return new MonthOnDayOfMonthUnit(Schedule, _duration, day);
+            return new MonthOnDayOfMonthUnit(Schedule, Duration, day);
         }
 
         /// <summary>
@@ -32,7 +35,7 @@
         /// </summary>
         public MonthOnLastDayOfMonthUnit OnTheLastDay()
         {
-            return new MonthOnLastDayOfMonthUnit(Schedule, _duration);
+            return new MonthOnLastDayOfMonthUnit(Schedule, Duration);
         }
 
         /// <summary>
@@ -41,7 +44,7 @@
         /// <param name="day">The day of the week.</param>
         public MonthOnDayOfWeekUnit OnTheFirst(DayOfWeek day)
         {
-            return new MonthOnDayOfWeekUnit(Schedule, _duration, Week.First, day);
+            return new MonthOnDayOfWeekUnit(Schedule, Duration, Week.First, day);
         }
 
         /// <summary>
@@ -50,7 +53,7 @@
         /// <param name="day">The day of the week.</param>
         public MonthOnDayOfWeekUnit OnTheSecond(DayOfWeek day)
         {
-            return new MonthOnDayOfWeekUnit(Schedule, _duration, Week.Second, day);
+            return new MonthOnDayOfWeekUnit(Schedule, Duration, Week.Second, day);
         }
 
         /// <summary>
@@ -59,7 +62,7 @@
         /// <param name="day">The day of the week.</param>
         public MonthOnDayOfWeekUnit OnTheThird(DayOfWeek day)
         {
-            return new MonthOnDayOfWeekUnit(Schedule, _duration, Week.Third, day);
+            return new MonthOnDayOfWeekUnit(Schedule, Duration, Week.Third, day);
         }
 
         /// <summary>
@@ -68,7 +71,7 @@
         /// <param name="day">The day of the week.</param>
         public MonthOnDayOfWeekUnit OnTheFourth(DayOfWeek day)
         {
-            return new MonthOnDayOfWeekUnit(Schedule, _duration, Week.Fourth, day);
+            return new MonthOnDayOfWeekUnit(Schedule, Duration, Week.Fourth, day);
         }
 
         /// <summary>
@@ -77,7 +80,7 @@
         /// <param name="day">The day of the week.</param>
         public MonthOnDayOfWeekUnit OnTheLast(DayOfWeek day)
         {
-            return new MonthOnDayOfWeekUnit(Schedule, _duration, Week.Last, day);
+            return new MonthOnDayOfWeekUnit(Schedule, Duration, Week.Last, day);
         }
     }
 }

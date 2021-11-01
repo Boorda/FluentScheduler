@@ -26,5 +26,15 @@
         /// Date and time of next run.
         /// </summary>
         public DateTime? NextRun { get; set; }
+
+        /// <summary>
+        /// Number of times the job was run.
+        /// </summary>
+        public int RunCount { get; set; }
+
+        /// <summary>
+        /// Cancel state of the job.
+        /// </summary>
+        public CancelType CancelType { get; set; }
     }
 }

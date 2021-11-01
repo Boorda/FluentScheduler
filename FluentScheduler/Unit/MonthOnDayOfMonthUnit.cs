@@ -7,25 +7,26 @@
     /// </summary>
     public sealed class MonthOnDayOfMonthUnit : IDayRestrictableUnit
     {
-        private readonly int _duration;
 
         private readonly int _dayOfMonth;
 
         internal MonthOnDayOfMonthUnit(Schedule schedule, int duration, int dayOfMonth)
         {
-            _duration = duration;
+            Duration = duration;
             _dayOfMonth = dayOfMonth;
             Schedule = schedule;
             At(0, 0);
         }
 
-        internal Schedule Schedule { get; private set; }
+        internal int Duration { get; private set; }
+        int ITimeRestrictableUnit.Duration { get { return Duration; } }
 
-        Schedule IDayRestrictableUnit.Schedule { get { return this.Schedule; } }
+        internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return this.Schedule; } }
 
         DateTime IDayRestrictableUnit.DayIncrement(DateTime increment)
         {
-            return increment.AddDays(_duration);
+            return increment.AddDays(Duration);
         }
 
         /// <summary>
@@ -45,7 +46,7 @@
 
                 var date = x.Date.First();
                 var runThisMonth = calculate(date);
-                var runAfterThisMonth = calculate(date.AddMonths(_duration));
+                var runAfterThisMonth = calculate(date.AddMonths(Duration));
 
                 return x > runThisMonth ? runAfterThisMonth : runThisMonth;
             };

@@ -3,19 +3,20 @@
     /// <summary>
     /// Unit of time in minutes.
     /// </summary>
-    public sealed class MinuteUnit : ITimeRestrictableUnit
+    public sealed class MinuteUnit : IUnit, ITimeRestrictableUnit
     {
-        private readonly int _duration;
 
         internal MinuteUnit(Schedule schedule, int duration)
         {
-            _duration = duration;
+            Duration = duration;
             Schedule = schedule;
-            Schedule.CalculateNextRun = x => x.AddMinutes(_duration);
+            Schedule.CalculateNextRun = x => x.AddMinutes(Duration);
         }
 
-        internal Schedule Schedule { get; private set; }
+        internal int Duration { get; private set; }
+        int ITimeRestrictableUnit.Duration { get { return Duration; } }
 
-        Schedule ITimeRestrictableUnit.Schedule { get { return this.Schedule; } }
+        internal Schedule Schedule { get; private set; }
+        Schedule IUnit.Schedule { get { return this.Schedule; } }
     }
 }
